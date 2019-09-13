@@ -12,6 +12,8 @@
 
 namespace AlexKratky;
 
+use \PDO;
+
 class db {
     /**
      * @var PDO $conn The connection to db.
