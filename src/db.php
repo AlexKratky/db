@@ -1,9 +1,9 @@
 <?php
 /**
  * @name db.php
- * @link https://alexkratky.cz                          Author website
+ * @link https://alexkratky.com                         Author website
  * @link https://panx.eu/docs/                          Documentation
- * @link https://github.com/AlexKratky/panx-framework/  Github Repository
+ * @link https://github.com/AlexKratky/db/              Github Repository
  * @author Alex Kratky <info@alexkratky.cz>
  * @copyright Copyright (c) 2020 Alex Kratky
  * @license http://opensource.org/licenses/mit-license.php MIT License
@@ -67,8 +67,9 @@ use \PDO;
         ));
         $query = self::$conn->prepare($sql);
         $query->execute($params);
-        self::$id = self::$conn->lastInsertId();
-        return $query;
+        $id = self::$conn->lastInsertId();
+        self::$id = $id;
+        return $id;
     }
 
     /**
@@ -83,7 +84,7 @@ use \PDO;
         ));
         $q = self::$conn->prepare($sql);
         $q->execute($params);
-        $data = $q->fetch();
+        $data = $q->fetch(PDO::FETCH_ASSOC);
         return $data;
     }
 
@@ -93,22 +94,6 @@ use \PDO;
      * @param array $params The array of parameters.
      */
     public static function multipleSelect(string $sql, array $params = array()) {
-        self::saveQuery(array(
-            $sql,
-            $params
-        ));
-        $q = self::$conn->prepare($sql);
-        $q->execute($params);
-        $data = $q->fetchAll(PDO::FETCH_ASSOC);
-        return $data;
-    }
-
-    /**
-     * Execute query on DB and fetch all rows of result as assoc array.
-     * @param string $sql The query. Use ? for parameters.
-     * @param array $params The array of parameters.
-     */
-    public static function multipleSelectAssoc(string $sql, array $params = array()) {
         self::saveQuery(array(
             $sql,
             $params
